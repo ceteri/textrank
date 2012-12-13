@@ -34,48 +34,41 @@ package com.sharethis.textrank;
 
 import java.io.File;
 
-import opennlp.tools.lang.english.ParserTagger;
-import opennlp.tools.lang.english.SentenceDetector;
-import opennlp.tools.lang.english.Tokenizer;
-import opennlp.tools.sentdetect.SentenceDetectorME;
-import opennlp.tools.util.Sequence;
+import opennlp.tools.lang.spanish.PosTagger;
+import opennlp.tools.lang.spanish.SentenceDetector;
+import opennlp.tools.lang.spanish.Tokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.tartarus.snowball.ext.englishStemmer;
-
-import spiaotools.SentParDetector;
+import org.tartarus.snowball.ext.SpanishStemmer;
 
 
 /**
- * Implementation of English-specific tools for natural language
+ * Implementation of Spanish-specific tools for natural language
  * processing.
  *
  * @author paco@sharethis.com
  */
 
 public class
-    LanguageEnglish
+    LanguageSpanish
     extends LanguageModel
 {
     // logging
 
     private final static Log LOG =
-        LogFactory.getLog(LanguageEnglish.class.getName());
+        LogFactory.getLog(LanguageSpanish.class.getName());
 
 
     /**
      * Public definitions.
      */
 
-    public static SentParDetector splitter_en = null;
-    /** /
-    public static SentenceDetectorME splitter_en = null;
-    /* */
-    public static Tokenizer tokenizer_en = null;
-    public static ParserTagger tagger_en = null;
-    public static englishStemmer stemmer_en = null;
+    public static SentenceDetector splitter_es = null;
+    public static Tokenizer tokenizer_es = null;
+    public static PosTagger tagger_es = null;
+    public static SpanishStemmer stemmer_es = null;
 
 
     /**
@@ -84,10 +77,10 @@ public class
      */
 
     public
-	LanguageEnglish (final String path)
+	LanguageSpanish (final String path)
 	throws Exception
     {
-	if (splitter_en == null) {
+	if (splitter_es == null) {
 	    loadResources(path);
 	}
     }
@@ -101,24 +94,17 @@ public class
 	loadResources (final String path)
 	throws Exception
     {
-	splitter_en = new SentParDetector();
+	splitter_es =
+	    new SentenceDetector((new File(path, "opennlp/SpanishSent.bin.gz")).getPath());
 
-	/** /
-	splitter_en =
-		new SentenceDetector((new File(path, "opennlp/EnglishSD.bin.gz")).getPath());
-	/* */
+	tokenizer_es =
+	    new Tokenizer((new File(path, "opennlp/SpanishTok.bin.gz")).getPath());
 
-	tokenizer_en =
-	    new Tokenizer((new File(path, "opennlp/EnglishTok.bin.gz")).getPath());
+	tagger_es =
+	    new PosTagger((new File(path, "opennlp/SpanishPOS.bin.gz")).getPath());
 
-	tagger_en =
-	    new ParserTagger((new File(path, "opennlp/tag.bin.gz")).getPath(),
-			     (new File(path, "opennlp/tagdict")).getPath(),
-			     false
-			     );
-
-	stemmer_en =
-	    new englishStemmer();
+	stemmer_es =
+	    new SpanishStemmer();
     }
 
 
@@ -129,11 +115,7 @@ public class
     public String[]
 	splitParagraph (final String text)
     {
-	return splitter_en.markupRawText(2, text).split("\\n");
-
-	/** /
-	return splitter_en.sentDetect(text);
-	/* */
+	return splitter_es.sentDetect(text);
     }
 
 
@@ -144,13 +126,7 @@ public class
     public String[]
 	tokenizeSentence (final String text)
     {
-	final String[] token_list = tokenizer_en.tokenize(text);
-
-	for (int i = 0; i < token_list.length; i++) {
-	    token_list[i] = token_list[i].replace("\"", "").toLowerCase().trim();
-	}
-
-	return token_list;
+	return tokenizer_es.tokenize(text);
     }
 
 
@@ -161,17 +137,7 @@ public class
     public String[]
 	tagTokens (final String[] token_list)
     {
-	final Sequence[] sequences = tagger_en.topKSequences(token_list);
-	final String[] tag_list = new String[token_list.length];
-
-	int i = 0;
-
-	for (Object obj : sequences[0].getOutcomes()) {
-	    tag_list[i] = (String) obj;
-	    i++;
-	}
-
-	return tag_list;
+	return tagger_es.tag(token_list);
     }
 
 
@@ -195,7 +161,7 @@ public class
     public boolean
 	isNoun (final String pos)
     {
-	return pos.startsWith("NN");
+	return pos.startsWith("NC");
     }
 
 
@@ -206,7 +172,7 @@ public class
     public boolean
 	isAdjective (final String pos)
     {
-	return pos.startsWith("JJ");
+	return pos.startsWith("AQ");
     }
 
 
@@ -217,9 +183,9 @@ public class
     public String
 	stemToken (final String token)
     {
-	stemmer_en.setCurrent(token);
-	stemmer_en.stem();
+	stemmer_es.setCurrent(token);
+	stemmer_es.stem();
 
-	return stemmer_en.getCurrent();
+	return stemmer_es.getCurrent();
     }
 }

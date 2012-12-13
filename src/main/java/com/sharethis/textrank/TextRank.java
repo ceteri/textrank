@@ -32,8 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sharethis.textrank;
 
-import com.sharethis.common.IOUtils;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,6 +57,7 @@ import java.util.concurrent.TimeoutException;
 
 import net.didion.jwnl.data.POS;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -457,7 +456,7 @@ public class
 
 	// load the sample text from a file
 
-	final String text = IOUtils.readFile(data_file);
+	final String text = FileUtils.readFileToString(new File(data_file));
 
 	// filter out overly large files
 

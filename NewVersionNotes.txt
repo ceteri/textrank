@@ -1,0 +1,4 @@
+example usage 
+java -cp target/textrank.jar:lib/sptoolkit.jar com.sharethis.textrank.TextRank 
+src/main/resources/log4j.properties src/main/resources en README /tmp/tr.out  	
+   
