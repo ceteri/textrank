@@ -55,7 +55,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import net.didion.jwnl.data.POS;
+import net.sf.extjwnl.data.POS;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
