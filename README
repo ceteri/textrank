@@ -31,15 +31,12 @@ used here, into some DBD structure with an in-memory cache.
 
 ---------
 
-simple test:
-	ant run
+To build:
+    mvn package
 
-test with a specific data file FOO.txt
+Simple Test:
 
-	ant -Ddata.file=FOO.txt run
-
-build the JAR for export to another project:
-	ant jar
+java -cp target/textrank-1.0-SNAPSHOT-jar-with-dependencies.jar:lib/sptoolkit.jar com.sharethis.textrank.TextRank src/main/resources/log4j.properties src/main/resources en src/test/resources/good.txt /tmp/graph.tsv
 
 ---------
 
@@ -69,8 +66,8 @@ sptoolkit.jar
 trove-2.0.2.jar
     http://trove4j.sourceforge.net/
 
-jwnl-1.4rc1.jar
-    http://sourceforge.net/projects/jwordnet
+extjwnl
+   http://extjwnl.sourceforge.net/
 
 jdom-1-1.jar
     http://jdom.org/downloads/index.html
