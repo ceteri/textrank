@@ -36,7 +36,31 @@ To build:
 
 Simple Test:
 
-java -cp target/textrank-1.0-SNAPSHOT-jar-with-dependencies.jar:lib/sptoolkit.jar com.sharethis.textrank.TextRank src/main/resources/log4j.properties src/main/resources en src/test/resources/good.txt /tmp/graph.tsv
+java -cp target/textrank.jar com.sharethis.textrank.TextRank
+    -i src/test/resources/good.txt -l en
+    -r src/main/resources
+
+---------
+
+Usage: com.sharethis.textrank.TextRank [options] Example of usage:
+
+java -cp target/textrank.jar -i <input> -l <language> -r <resources>
+    --log <log properties>
+
+java -cp target/textrank.jar -i src/test/resources/good.txt
+
+java -cp target/textrank.jar -i src/test/resources/good.txt -l en
+    -r src/main/resources
+
+
+  Options:
+  * -i, --input       The input document
+    -l, --language    Language: en / es
+                      Default: en
+        --log         Logging properties file
+                      Default: src/main/resources/log4j.properties
+    -r, --resources   Path to resources
+                      Default: src/main/resources
 
 ---------
 
