@@ -32,11 +32,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sharethis.textrank;
 
-import net.didion.jwnl.data.POS;
-import net.didion.jwnl.data.IndexWord;
-import net.didion.jwnl.data.Pointer;
-import net.didion.jwnl.data.PointerType;
-import net.didion.jwnl.data.Synset;
+import java.util.List;
+
+import net.sf.extjwnl.data.POS;
+import net.sf.extjwnl.data.IndexWord;
+import net.sf.extjwnl.data.Pointer;
+import net.sf.extjwnl.data.PointerType;
+import net.sf.extjwnl.data.Synset;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -128,7 +130,7 @@ public class
 		final Node node_synset = testLink(subgraph, synset, n, MyRelation.SYNONYM, 1);
 
 		if (node_synset != null) {
-		    final Pointer[] hypernyms = synset.getPointers(PointerType.HYPERNYM);
+		    final List<Pointer> hypernyms = synset.getPointers(PointerType.HYPERNYM);
 
 		    for (Pointer hypernym : hypernyms) {
 			final Synset hypernym_synset = hypernym.getTargetSynset();
@@ -140,7 +142,7 @@ public class
 			final Node node_hypernym = testLink(subgraph, hypernym_synset, node_synset, MyRelation.HYPERNYM, 2);
 
 			if (node_hypernym != null) {
-			    final Pointer[] siblings = hypernym_synset.getPointers(PointerType.HYPONYM);
+			    final List<Pointer> siblings = hypernym_synset.getPointers(PointerType.HYPONYM);
 
 			    for (Pointer sibling : siblings) {
 				final Synset sibling_synset = sibling.getTargetSynset();

@@ -32,12 +32,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sharethis.textrank;
 
-import net.didion.jwnl.JWNL;
-import net.didion.jwnl.JWNLException;
-import net.didion.jwnl.data.IndexWord;
-import net.didion.jwnl.data.POS;
-import net.didion.jwnl.dictionary.Dictionary;
-import net.didion.jwnl.dictionary.MorphologicalProcessor;
+//import net.didion.jwnl.JWNL;
+//import net.didion.jwnl.JWNLException;
+//import net.didion.jwnl.data.IndexWord;
+//import net.didion.jwnl.data.POS;
+//import net.didion.jwnl.dictionary.Dictionary;
+//import net.didion.jwnl.dictionary.MorphologicalProcessor;
+
+import net.sf.extjwnl.JWNL;
+import net.sf.extjwnl.JWNLException;
+import net.sf.extjwnl.data.IndexWord;
+import net.sf.extjwnl.data.POS;
+import net.sf.extjwnl.dictionary.Dictionary;
+import net.sf.extjwnl.dictionary.MorphologicalProcessor;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -79,6 +86,7 @@ public class
 
     protected static Dictionary dictionary = null;
     protected static MorphologicalProcessor mp = null;
+    private static boolean initialized = false;
 
 
     /**
@@ -91,7 +99,7 @@ public class
     {
 	// initialize the JWNL properties
 
-	if (!JWNL.isInitialized()) {
+	if (!initialized) {
 	    final String model_path =
 		res_path + "/" + lang_code;
 
@@ -108,6 +116,7 @@ public class
 
 	    dictionary = Dictionary.getInstance();
 	    mp = dictionary.getMorphologicalProcessor();
+	    initialized = true;
 	}
     }
 

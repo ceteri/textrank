@@ -32,37 +32,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.sharethis.textrank;
 
-import com.sharethis.common.IOUtils;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.TreeSet;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import net.didion.jwnl.data.POS;
+import net.sf.extjwnl.data.POS;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.apache.log4j.PropertyConfigurator;
+
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 
 
 /**
@@ -444,29 +438,34 @@ public class
 	final String res_path =
 	    new File(System.getProperty(NLP_RESOURCES)).getPath();
 	/* */
+    	
+    TextRankCli cli = new TextRankCli();
+    JCommander jc = new JCommander(cli);
+    jc.setProgramName(TextRank.class.getName());
+    try {
+    	jc.parse(args);
+    } catch (ParameterException e) {
+    	System.out.println(String.format("[ERROR] %s\n", e.getMessage()));
+    	jc.usage();
+    	return;
+    }
 
-	final String log4j_conf = args[0];
-	final String res_path = args[1];
-	final String lang_code = args[2];
-	final String data_file = args[3];
-	final String graph_file = args[4];
-
-        // set up logging for debugging and instrumentation
+    // set up logging for debugging and instrumentation
         
-        PropertyConfigurator.configure(log4j_conf);
+    PropertyConfigurator.configure(cli.log4j_conf);
 
 	// load the sample text from a file
 
-	final String text = IOUtils.readFile(data_file);
+	final String text = FileUtils.readFileToString(new File(cli.data_file));
 
 	// filter out overly large files
 
 	boolean use_wordnet = true; // false
-	use_wordnet = use_wordnet && ("en".equals(lang_code));
+	use_wordnet = use_wordnet && ("en".equals(cli.lang_code));
 
 	// main entry point for the algorithm
 
-	final TextRank tr = new TextRank(res_path, lang_code);
+	final TextRank tr = new TextRank(cli.res_path, cli.lang_code);
 	tr.prepCall(text, use_wordnet);
 
 	// wrap the call in a timed task
@@ -502,4 +501,28 @@ public class
 
 	LOG.info("\n" + tr);
     }
+}
+
+class TextRankCli {
+
+	@Parameter(description = "Example of usage:\n\n"
+			+ "java -jar target/textrank.jar -i <input> -l <language> -r <resources>\n"
+			+ "    --log <log properties>\n\n"
+			+ "java -jar target/textrank.jar -i src/test/resources/good.txt\n\n"
+			+ "java -jar target/textrank.jar -i src/test/resources/good.txt -l en\n"
+			+ "    -r src/main/resources\n\n")
+	private List<String> usage;
+
+	@Parameter(names = { "-i", "--input" }, required = true, description = "The input document")
+	String data_file;
+
+	@Parameter(names = { "-l", "--language" }, required = false, description = "Language: en / es")
+	String lang_code = "en";
+
+	@Parameter(names = { "-r", "--resources" }, required = false, description = "Path to resources")
+	String res_path = "src/main/resources";
+
+	@Parameter(names = { "--log" }, required = false, description = "Logging properties file")
+	String log4j_conf = "src/main/resources/log4j.properties";
+	
 }
