@@ -57,7 +57,6 @@ import org.apache.log4j.PropertyConfigurator;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.ParametersDelegate;
 
 
 /**
@@ -448,7 +447,7 @@ public class
     } catch (ParameterException e) {
     	System.out.println(String.format("[ERROR] %s\n", e.getMessage()));
     	jc.usage();
-    	System.exit(1);
+    	return;
     }
 
     // set up logging for debugging and instrumentation

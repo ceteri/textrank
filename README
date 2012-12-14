@@ -36,9 +36,7 @@ To build:
 
 Simple Test:
 
-java -cp target/textrank.jar com.sharethis.textrank.TextRank
-    -i src/test/resources/good.txt -l en
-    -r src/main/resources
+java -cp target/textrank.jar -i src/test/resources/good.txt 
 
 ---------
 
