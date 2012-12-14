@@ -36,18 +36,18 @@ To build:
 
 Simple Test:
 
-java -cp target/textrank.jar -i src/test/resources/good.txt 
+java -jar target/textrank.jar -i src/test/resources/good.txt 
 
 ---------
 
 Usage: com.sharethis.textrank.TextRank [options] Example of usage:
 
-java -cp target/textrank.jar -i <input> -l <language> -r <resources>
+java -jar target/textrank.jar -i <input> -l <language> -r <resources>
     --log <log properties>
 
-java -cp target/textrank.jar -i src/test/resources/good.txt
+java -jar target/textrank.jar -i src/test/resources/good.txt
 
-java -cp target/textrank.jar -i src/test/resources/good.txt -l en
+java -jar target/textrank.jar -i src/test/resources/good.txt -l en
     -r src/main/resources
 
 

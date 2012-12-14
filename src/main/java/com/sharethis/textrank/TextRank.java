@@ -506,10 +506,10 @@ public class
 class TextRankCli {
 
 	@Parameter(description = "Example of usage:\n\n"
-			+ "java -cp target/textrank.jar -i <input> -l <language> -r <resources>\n"
+			+ "java -jar target/textrank.jar -i <input> -l <language> -r <resources>\n"
 			+ "    --log <log properties>\n\n"
-			+ "java -cp target/textrank.jar -i src/test/resources/good.txt\n\n"
-			+ "java -cp target/textrank.jar -i src/test/resources/good.txt -l en\n"
+			+ "java -jar target/textrank.jar -i src/test/resources/good.txt\n\n"
+			+ "java -jar target/textrank.jar -i src/test/resources/good.txt -l en\n"
 			+ "    -r src/main/resources\n\n")
 	private List<String> usage;
 
